@@ -151,7 +151,7 @@
 <meta property="og:image" content="https://pic4.zhimg.com/80/v2-5c88777b26c156f66674e4e8a7e547db_720w.jpg">
 <meta property="og:image" content="https://pic3.zhimg.com/80/v2-cbbc3b7203e60563c3aaacd835f423ea_720w.jpg">
 <meta property="og:image" content="https://pic2.zhimg.com/80/v2-eab5fafcafa14b6051099aa95d793bfd_720w.jpg">
-<meta property="og:updated_time" content="2020-07-01T16:25:13.184Z">
+<meta property="og:updated_time" content="2020-07-28T07:41:40.110Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【自制FOC驱动器】深入浅出讲解FOC控制与SVPWM技术">
 <meta name="twitter:description" content="0.前言前阵子工作太忙，好久没做个人项目了，最近久违地想做一个机器人项目玩，设计中需要用到高性能超小体积的伺服电机。 电机这一块性能满足项目需求的基本上只有无刷电机可以选了–又要大功率、大扭矩，又要体积小，成本还最好不要太高，选择低KV值的无刷电机显然是最合适的。我预计的方案中计划把减速器也省略了，采用扭矩无刷电机直驱。那么作为机器人硬件三大核心部件（电机、减速器、驱动器）之一的驱动器，我感觉是">
@@ -629,8 +629,14 @@ var _hmt = _hmt || [];
 <p>又比如，因为可以做到力矩的精确控制，我们可以用FOC驱动器配合无刷电机来实现各种<strong>力回馈装置，</strong>这就好像iPhone的<strong>Haptic Engine</strong>一样，可以模拟出各种以假乱真的物理效果<strong>：</strong></p>
 <p><img src="https://pic4.zhimg.com/80/v2-116a761b9b1c73939f0e6259c1deeadb_720w.jpg" alt="img">罗技的力回馈方向盘</p>
 <p>最后顺便提一下，我最近也在设计一个FOC矢量驱动器，熟悉我的同学应该知道我做东西的风格就是–唯小不破，因此这次也是准备设计一个超迷你的高性能FOC驱动器。硬件已经基本完工了，电路设计如下图，分为上下叠板设计，将<strong>逻辑单元</strong>和<strong>功率单元</strong>分开：</p>
-<p><img src="https://pic3.zhimg.com/80/v2-fe170e2bea9f24b20e7a818032d44a1e_720w.jpg" alt="img">逻辑控制板</p>
-<p><img src="https://pic4.zhimg.com/80/v2-5c88777b26c156f66674e4e8a7e547db_720w.jpg" alt="img">功率输出板</p>
+<p><img src="https://pic3.zhimg.com/80/v2-fe170e2bea9f24b20e7a818032d44a1e_720w.jpg" alt="img"></p>
+<blockquote>
+<p>逻辑控制板</p>
+</blockquote>
+<p><img src="https://pic4.zhimg.com/80/v2-5c88777b26c156f66674e4e8a7e547db_720w.jpg" alt="img"></p>
+<blockquote>
+<p>功率输出板</p>
+</blockquote>
 <p>最后组装起来是这样的：</p>
 <p><img src="https://pic3.zhimg.com/80/v2-cbbc3b7203e60563c3aaacd835f423ea_720w.jpg" alt="img"></p>
 <p>同时我也给驱动器设计了个外壳（毕竟颜值就是正义啊~）：</p>
@@ -928,6 +934,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ARM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Altium Designer</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">谜之DIY</a>
               </li>
              
@@ -940,18 +954,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ARM</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Altium Designer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">C#</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Android</a>
               </li>
              
@@ -960,15 +962,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">FPGA</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">怀旧物</a>
+                <a href="javascript:void(0)" class="js-tag color3">C#</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">怀旧物</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -977,6 +979,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">生日快乐🎂</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">FPGA</a>
               </li>
              
               <li class="article-tag-list-item">
