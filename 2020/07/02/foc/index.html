@@ -8,13 +8,13 @@
   <link rel="dns-prefetch" href="http://pengzhihui.xyz">
   <title>【自制FOC驱动器】深入浅出讲解FOC算法与SVPWM技术 | 稚晖的个人站</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="0.前言前阵子工作太忙，好久没做个人项目了，最近久违地想做一个机器人项目玩，设计中需要用到高性能超小体积的伺服电机。 电机这一块性能满足项目需求的基本上只有无刷电机可以选了–又要大功率、大扭矩，又要体积小，成本还最好不要太高，选择低KV值的无刷电机显然是最合适的。我预计的方案中计划把减速器也省略了，采用扭矩无刷电机直驱。那么作为机器人硬件三大核心部件（电机、减速器、驱动器）之一的驱动器，我感觉是">
+  <meta name="description" content="0.前言前阵子工作太忙，好久没做个人项目了，最近久违地想做一个机器人项目，设计中需要用到高性能超小体积的伺服电机。 电机这一块性能满足项目需求的基本上只有无刷电机可以选了–又要大功率、大扭矩，又要体积小，成本还最好不要太高，选择低KV值的无刷电机显然是最合适的。我预计的方案中计划把减速器也省略了，采用扭矩无刷电机直驱。那么作为机器人硬件三大核心部件（电机、减速器、驱动器）之一的驱动器，我感觉是有">
 <meta name="keywords" content="项目">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【自制FOC驱动器】深入浅出讲解FOC算法与SVPWM技术">
 <meta property="og:url" content="http://pengzhihui.xyz/2020/07/02/foc/index.html">
 <meta property="og:site_name" content="稚晖的个人站">
-<meta property="og:description" content="0.前言前阵子工作太忙，好久没做个人项目了，最近久违地想做一个机器人项目玩，设计中需要用到高性能超小体积的伺服电机。 电机这一块性能满足项目需求的基本上只有无刷电机可以选了–又要大功率、大扭矩，又要体积小，成本还最好不要太高，选择低KV值的无刷电机显然是最合适的。我预计的方案中计划把减速器也省略了，采用扭矩无刷电机直驱。那么作为机器人硬件三大核心部件（电机、减速器、驱动器）之一的驱动器，我感觉是">
+<meta property="og:description" content="0.前言前阵子工作太忙，好久没做个人项目了，最近久违地想做一个机器人项目，设计中需要用到高性能超小体积的伺服电机。 电机这一块性能满足项目需求的基本上只有无刷电机可以选了–又要大功率、大扭矩，又要体积小，成本还最好不要太高，选择低KV值的无刷电机显然是最合适的。我预计的方案中计划把减速器也省略了，采用扭矩无刷电机直驱。那么作为机器人硬件三大核心部件（电机、减速器、驱动器）之一的驱动器，我感觉是有">
 <meta property="og:image" content="http://pengzhihui.xyz/img/foc1.jpg">
 <meta property="og:image" content="https://pic2.zhimg.com/80/v2-2b563a98a992590b653d8380f1733481_720w.jpg">
 <meta property="og:image" content="https://pic2.zhimg.com/80/v2-c346d6bd2f74dc975c5fff35d506dcbd_720w.jpg">
@@ -151,10 +151,10 @@
 <meta property="og:image" content="https://pic4.zhimg.com/80/v2-5c88777b26c156f66674e4e8a7e547db_720w.jpg">
 <meta property="og:image" content="https://pic3.zhimg.com/80/v2-cbbc3b7203e60563c3aaacd835f423ea_720w.jpg">
 <meta property="og:image" content="https://pic2.zhimg.com/80/v2-eab5fafcafa14b6051099aa95d793bfd_720w.jpg">
-<meta property="og:updated_time" content="2020-09-05T07:16:00.535Z">
+<meta property="og:updated_time" content="2020-12-03T08:28:35.833Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【自制FOC驱动器】深入浅出讲解FOC算法与SVPWM技术">
-<meta name="twitter:description" content="0.前言前阵子工作太忙，好久没做个人项目了，最近久违地想做一个机器人项目玩，设计中需要用到高性能超小体积的伺服电机。 电机这一块性能满足项目需求的基本上只有无刷电机可以选了–又要大功率、大扭矩，又要体积小，成本还最好不要太高，选择低KV值的无刷电机显然是最合适的。我预计的方案中计划把减速器也省略了，采用扭矩无刷电机直驱。那么作为机器人硬件三大核心部件（电机、减速器、驱动器）之一的驱动器，我感觉是">
+<meta name="twitter:description" content="0.前言前阵子工作太忙，好久没做个人项目了，最近久违地想做一个机器人项目，设计中需要用到高性能超小体积的伺服电机。 电机这一块性能满足项目需求的基本上只有无刷电机可以选了–又要大功率、大扭矩，又要体积小，成本还最好不要太高，选择低KV值的无刷电机显然是最合适的。我预计的方案中计划把减速器也省略了，采用扭矩无刷电机直驱。那么作为机器人硬件三大核心部件（电机、减速器、驱动器）之一的驱动器，我感觉是有">
 <meta name="twitter:image" content="http://pengzhihui.xyz/img/foc1.jpg">
   
     <link rel="alternative" href="/atom.xml" title="稚晖的个人站" type="application/atom+xml">
@@ -350,7 +350,7 @@ var _hmt = _hmt || [];
     <div class="article-entry" itemprop="articleBody">
       
         <p><img src="/img/foc1.jpg" alt=""></p>
-<h2 id="0-前言"><a href="#0-前言" class="headerlink" title="0.前言"></a>0.前言</h2><p>前阵子工作太忙，好久没做个人项目了，最近久违地想做一个机器人项目玩，设计中需要用到高性能超小体积的伺服电机。</p>
+<h2 id="0-前言"><a href="#0-前言" class="headerlink" title="0.前言"></a>0.前言</h2><p>前阵子工作太忙，好久没做个人项目了，最近久违地想做一个机器人项目，设计中需要用到高性能超小体积的伺服电机。</p>
 <p>电机这一块性能满足项目需求的基本上只有<strong>无刷电机</strong>可以选了–又要大功率、大扭矩，又要体积小，成本还最好不要太高，选择低KV值的无刷电机显然是最合适的。我预计的方案中计划把减速器也省略了，采用扭矩无刷电机直驱。那么作为机器人硬件三大核心部件（<strong>电机</strong>、<strong>减速器</strong>、<strong>驱动器</strong>）之一的驱动器，我感觉是有必要自己设计一下的，因此这里把我学习FOC过程中看到的一些有关无刷电机矢量控制的资料和个人理解整理分享出来。</p>
 <h3 id="0-1-什么是FOC？"><a href="#0-1-什么是FOC？" class="headerlink" title="0.1 什么是FOC？"></a><strong>0.1 什么是FOC？</strong></h3><p><strong>FOC（Field-Oriented Control）</strong>，直译是磁场定向控制，也被称作矢量控制<strong>（VC，Vector Control）</strong>，是目前无刷直流电机（BLDC）和永磁同步电机（PMSM）高效控制的最优方法之一。FOC旨在通过精确地控制磁场大小与方向，使得电机的运动转矩平稳、噪声小、效率高，并且具有高速的动态响应。</p>
 <p>简单来说就是，FOC是一种对无刷电机的驱动控制方法，它可以让我们对无刷电机进行“<strong>像素级”</strong>控制，实现很多传统电机控制方法所无法达到的效果~</p>
@@ -644,7 +644,13 @@ var _hmt = _hmt || [];
 <p><img src="https://pic3.zhimg.com/80/v2-cbbc3b7203e60563c3aaacd835f423ea_720w.jpg" alt="img"></p>
 <p>同时我也给驱动器设计了个外壳（毕竟颜值就是正义啊~）：</p>
 <p><img src="https://pic2.zhimg.com/80/v2-eab5fafcafa14b6051099aa95d793bfd_720w.jpg" alt="img"></p>
-<h2 id="关于这个驱动器的具体参数和功能呢，等我硬件加工好了再来更新-欢迎关注"><a href="#关于这个驱动器的具体参数和功能呢，等我硬件加工好了再来更新-欢迎关注" class="headerlink" title="关于这个驱动器的具体参数和功能呢，等我硬件加工好了再来更新~欢迎关注"></a>关于这个驱动器的具体参数和功能呢，等我硬件加工好了再来更新~欢迎关注</h2>
+<p><strong>关于这个驱动器的具体参数和功能呢，等我硬件加工好了再来更新~</strong></p>
+<h2 id="2020-9-5更新，FOC驱动器做好啦"><a href="#2020-9-5更新，FOC驱动器做好啦" class="headerlink" title="2020.9.5更新，FOC驱动器做好啦~"></a>2020.9.5更新，FOC驱动器做好啦~</h2><div style="height: 0;padding-bottom:65%;position: relative;"><br><iframe width="760" height="510" src="//player.bilibili.com/player.html?aid=414478323&bvid=BV11V41127pq&cid=232289126&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen style="position: absolute;height: 105%;width: 100%;"> </iframe><br></div>  
+
+
+
+<p><br></p>
+
       
 
       
@@ -757,6 +763,15 @@ var _hmt = _hmt || [];
 
   
 <nav id="article-nav">
+  
+    <a href="/2020/09/02/deepvision/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          【已开源】如何快速部署CV算法--DeepVision CV推理框架
+        
+      </div>
+    </a>
   
   
     <a href="/2020/03/25/unit/" id="article-nav-older" class="article-nav-link-wrap">
@@ -937,14 +952,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">谜之DIY</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Android</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
               </li>
              
@@ -961,7 +968,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Arduino</a>
+                <a href="javascript:void(0)" class="js-tag color1">谜之DIY</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Android</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -969,11 +980,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">怀旧物</a>
+                <a href="javascript:void(0)" class="js-tag color3">Arduino</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">FPGA</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">怀旧物</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -985,7 +1000,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color5">FPGA</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1001,11 +1016,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Deep Learning</a>
+                <a href="javascript:void(0)" class="js-tag color3">感悟</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">感悟</a>
+                <a href="javascript:void(0)" class="js-tag color4">Deep Learning</a>
               </li>
              
               <li class="article-tag-list-item">

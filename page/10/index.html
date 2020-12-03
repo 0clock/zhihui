@@ -266,6 +266,118 @@ var _hmt = _hmt || [];
 
 
   
+    <article id="post-faceapp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/02/22/faceapp/">“颜艺Boy!” — 调戏表情包APP</a>
+    </h1>
+  
+
+        
+        <a href="/2016/02/22/faceapp/" class="archive-article-date">
+  	<time datetime="2016-02-21T17:09:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-02-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <pre><code>“颜艺Boy”是一个实时捕捉人脸姿态和表情的Android APP，提供Arduino库函数支持，可以跟硬件配合起来实现一些有趣的项目
+</code></pre><blockquote>
+<p>最近撸机器学习有点感觉，遂想趁热来一发小应用。。正好工作室目前有一个高仿真机器人的项目，到时候会使用硅胶制作机器人皮肤（参考机器人<a href="http://news.mydrivers.com/1/478/478390.htm" target="_blank" rel="external">“佳佳”</a>  ），而面部也会布置一些驱动系统，这样就可以<del>制作表情包</del>对客人微笑了😊。于是我大眼一转，决定先搞个表情捕捉APP😆</p>
+</blockquote>
+<h2 id="效果先看看视频演示"><a href="#效果先看看视频演示" class="headerlink" title="效果先看看视频演示"></a><strong>效果先看看视频演示</strong></h2><div style="height: 0;padding-bottom: 61%;position: relative;"><br><iframe width="560" height="315" src="http://player.youku.com/embed/XMjUyNjAxNzY3Ng" frameborder="0" allowfullscreen style="position: absolute;height: 100%;width: 100%;"></iframe><br></div>
+
+<p><br></p>
+<h2 id="简单介绍一下原理"><a href="#简单介绍一下原理" class="headerlink" title="简单介绍一下原理"></a><strong>简单介绍一下原理</strong></h2><blockquote>
+<p>程序主要分为5个功能模块：</p>
+<ul>
+<li>OpenCV基于PCA的人脸识别</li>
+<li>基于SDM的人脸关键点回归</li>
+<li>基于SVM的人脸训练集表情分类识别</li>
+<li>3D GUI显示</li>
+<li>蓝牙通信用于连接硬件</li>
+</ul>
+</blockquote>
+<p>​        其中关键点的检测效果还不错，而表情分类由于样本量的原因稍有些许不稳定（各种表情只用了25个训练样本）</p>
+<p><img src="/img/faceapp1.jpg" alt="加载失败,请刷新">  </p>
+<p>​        由于训练样本运算量较大，所以先通过手机采集图像数据，然后加好标签在PC端读取数据进行训练，APP中则直接加载训练好的XML文件。值得一提的是，在表情分类模块中，对人脸关键点数据的归一化操作十分重要，在网上看到一些案例是直接将点的像素坐标归一化，然而这样无法保证对所有头部姿态都进行正确分类。所以程序里我使用了一个坐标转换，将点的像素坐标转换为以人眉心为原点的坐标系，这样再归一化之后泛化效果就好了很多。</p>
+<p><img src="/img/faceapp2.jpg" alt="加载失败,请刷新">    <img src="/img/faceapp3.jpg" alt="加载失败,请刷新">  </p>
+<h2 id="跟Arduino联动"><a href="#跟Arduino联动" class="headerlink" title="跟Arduino联动"></a><strong>跟Arduino联动</strong></h2><p>​        和之前的<a href="http://pengzhihui.xyz/2016/05/05/trace/">迹APP</a>一样，我给颜艺Boy也提供了Arduino的库函数支持，可以让Arduino通过蓝牙读取人脸的表情、姿态、位置信息，库的使用非常简单，看示例代码就知道了。（库地址见文末）</p>
+<p><img src="/img/faceapp4.jpg" alt="加载失败,请刷新">  </p>
+<p>​        依然是通过这样的蓝牙模块连接，连接线如图：</p>
+<p><img src="/img/faceapp5.jpg" alt="加载失败,请刷新">  </p>
+<p>​        注意的是只需要接蓝牙的Tx，不需要接Rx，这样是为了让Arduino的print函数依然可以往控制台打印数据，另外下载程序的时候不要连接蓝牙不然会数据冲突无法下载。还需要注意初始化的波特率必须跟蓝牙模块一致（默认是9600，想要延迟更低的话可以改成115200）。</p>
+<p>​        其实用软串口的话就没有这些问题了，但是我好懒。。没时间完善库😥，要是有同学加上了软串口功能可以找我把代码整合进去。</p>
+<p>更新：已经改用软件串口，可以自定义端口了</p>
+<h2 id="APP兼容性"><a href="#APP兼容性" class="headerlink" title="APP兼容性"></a><strong>APP兼容性</strong></h2><p>​        由于这个东西后面是要应用到机器人上面的，所以一直在我的老开发机RAZR M上跑（没有更多的手机做测试😪），目前只适配了高通系的CPU，其他的某些手机可能由于CPU架构区别会出现闪退的情况，这个情况比较少但是不排除有，有问题的可以在下载页面留言机型和系统，我会尽快适配。</p>
+<p>APP下载：腾讯应用宝搜索“i颜艺Boy”下载</p>
+<p>Arduino库的地址：<a href="https://github.com/david-pzh/FaceAPP-Arduino" target="_blank" rel="external">https://github.com/david-pzh/FaceAPP-Arduino</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">项目</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/02/22/faceapp/">全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-wave1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -537,94 +649,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-ONE-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/12/19/ONE-1/">ONE的一小步</a>
-    </h1>
-  
-
-        
-        <a href="/2015/12/19/ONE-1/" class="archive-article-date">
-  	<time datetime="2015-12-19T15:11:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-12-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>上星期画好了ONE的PCB，今天把新打的板子焊好调了一番，完成了基本的控制程序，不出意外的ONE就站起来啦~</p>
-<div style="height: 0;padding-bottom: 61%;position: relative;"><br><iframe width="560" height="315" src="http://player.youku.com/embed/XMTQxODI0OTcxNg" frameborder="0" allowfullscreen style="position: absolute;height: 100%;width: 100%;"></iframe><br></div>  
-
-<p><br><br>自从去年在网上看到<a href="http://v.youku.com/v_show/id_XNzIxMjY1Njg=.html?from=s1.8-1-1.2" target="_blank" rel="external">村田男孩</a>和<a href="http://www.ednchina.com/ART_52100_28_0_OA_cb927270.HTM" target="_blank" rel="external">村田女孩</a>的视频就觉得印象深刻，一直想找机会自己仿制一个，但是早先尝试过一次由于个人天真导致并没有成功…这次是仔细设计了机械结构，电机也尽量找了参数匹配的，最终惯性平衡效果还是不错的。  </p>
-<p>至于下面的行走轮得等我找到合适的齿轮再调试，不过按以往的经验来看，这个跟惯性轮相比会简单很多。</p>
-<p>这是个人<em>new balance</em>系列制作的第三款作品（第一款<a href="http://www.geek-workshop.com/thread-10078-1-1.html" target="_blank" rel="external">磁浮</a>    第二款<a href="http://pengzhihui.xyz/2015/12/09/nano/">Nano</a>）</p>
-<p>项目之后依然会开源的，但是大家都知道我是个懒楼主，而且最近项目比较忙，所以感兴趣的请耐心等候。。。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">项目</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ARM</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Altium Designer</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/12/19/ONE-1/">全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/9/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/11/">Next &raquo;</a>
@@ -747,14 +771,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">谜之DIY</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Android</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
               </li>
              
@@ -771,7 +787,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Arduino</a>
+                <a href="javascript:void(0)" class="js-tag color1">谜之DIY</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Android</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -779,11 +799,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">怀旧物</a>
+                <a href="javascript:void(0)" class="js-tag color3">Arduino</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">FPGA</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">怀旧物</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -795,7 +819,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color5">FPGA</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -811,11 +835,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Deep Learning</a>
+                <a href="javascript:void(0)" class="js-tag color3">感悟</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">感悟</a>
+                <a href="javascript:void(0)" class="js-tag color4">Deep Learning</a>
               </li>
              
               <li class="article-tag-list-item">

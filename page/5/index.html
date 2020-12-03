@@ -189,6 +189,80 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-st" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/26/st/">2018深圳ST峰会</a>
+    </h1>
+  
+
+        
+        <a href="/2018/04/26/st/" class="archive-article-date">
+  	<time datetime="2018-04-26T09:18:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/img/st0.jpg" alt="加载失败,请刷新"></p>
+<blockquote>
+<ul>
+<li>前几天受邀到深圳参加今年的ST峰会做特邀演讲嘉宾，分享了个人的一些技术经验和作为一个极客的人生哲学😄，在深圳的同学可能有到蛇口希尔顿现场的，不知道有没有看到我~</li>
+<li>虽然目前主业已经不是做硬件了，但是感觉存货不少，有热闹哪能不凑呢是吧~时隔三年来深圳，见到很久不见的老朋友，也体验了一把深受人民爱戴的老创客待遇哈哈~</li>
+</ul>
+</blockquote>
+<p><img src="/img/st1.jpg" alt="加载失败,请刷新"></p>
+<p><img src="/img/st2.jpg" alt="加载失败,请刷新"></p>
+<p><img src="/img/st3.jpg" alt="加载失败,请刷新"></p>
+        
+          <a class="article-more-a" href="/2018/04/26/st/#more">继续阅读 >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/04/26/st/">全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-minipi" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -520,110 +594,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-wxjump" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/02/wxjump/">微信跳一跳【一键开挂】</a>
-    </h1>
-  
-
-        
-        <a href="/2018/01/02/wxjump/" class="archive-article-date">
-  	<time datetime="2018-01-02T07:08:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="/img/wxjump1.jpg" alt="加载失败,请刷新"></p>
-<blockquote>
-<p>“微信推送了v6. 6.1 版本更新，更新后，用户点开微信，其首页便是“跳一跳”这一游戏。微信团队这样的“强制推广”意图相当明显。但不管用什么样的方法，微信的“跳一跳”现在已经火遍了大江南北。”</p>
-<p>网上已经有很多关于这款游戏的秘籍攻略，但是我们当然不能走寻常路啦~玩过几局之后发现，这款游戏的特点注定了它极为容易被设计物理外挂：</p>
-<ul>
-<li>操作简单，只需要点击屏幕（也只有这一种操作）</li>
-<li>没有时间限制，每一跳都可以等完全准备好了再操作</li>
-<li>画风淳朴，可爱是一方面，另一个就是这样的画风很方便进行图像处理~</li>
-</ul>
-<p>机智的创客网友也有已经用舵机代替手指做出物理外挂的了↓</p>
-</blockquote>
-<p><img src="/img/wxjump2.gif" alt="加载失败,请刷新"></p>
-<blockquote>
-<p>由于我手边没有电容笔，而且感觉用外置摄像头加Arduino来玩这游戏有点小题大做，因此这里通过纯软件方式开挂，原理为：</p>
-<ul>
-<li>PC端通过ADB命令控制手机截图并上传</li>
-<li>PC端程序读取截图进行图像处理，这里用的OpenCV</li>
-<li>根据处理结果发送ADB命令模拟点击屏幕</li>
-<li>以上循环</li>
-</ul>
-<p>原理其实很简单，重点就在图像处理的步骤，这个游戏中也很好解决，首先我们知道游戏里小人跳的距离跟我们点击屏幕的时间成正比，因此PC端任务就是测量出小人和下一个站台之间的距离。对于小人的识别，我们直接使用模板匹配算法，OpenCV里有提供现成的<em>matchTemplate</em>方法；站台的识别则麻烦一点，因为站台是随机生成的，而且我们也不知道到底有几种，所以这里用了一个比较巧妙的方案↓</p>
-</blockquote>
-<p><img src="/img/wxjump3.jpg" alt="加载失败,请刷新"> <img src="/img/wxjump4.jpg" alt="加载失败,请刷新"></p>
-<blockquote>
-<p>仔细观察每个场景，下一个跳台始终是出现在最上方的，也就是说，我们把图像进行边缘二值化，从分数显示的那一行下面开始一行一行搜索，如果发现某个像素不为黑色，就找到了下一个跳台的上边缘，然后我们把这值往下偏移一点，就可以作为下一个跳点了，这个策略对每种跳台都是适用的。</p>
-<p>最终实现的效果还是非常不错的，在朋友的手机上轻松刷到了2000多分，该方案的主要速度限制在于手机截图上传的过程，可能会演示2-3秒，因此要想的高分还是得挂上个把小时的~</p>
-</blockquote>
-<p><img src="/img/wxjump5.gif" alt="加载失败,请刷新"></p>
-<blockquote>
-<p>项目开源，C++代码托管在<a href="https://coding.net/u/pengzhihui/p/WxJump/git" target="_blank" rel="external">这里</a><br>也打包了可执行文件方便想尝试的朋友直接体验<a href="https://pan.baidu.com/s/1qYqmIj6" target="_blank" rel="external">下载</a></p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/01/02/wxjump/">全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
@@ -746,14 +716,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">谜之DIY</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Android</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
               </li>
              
@@ -770,7 +732,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Arduino</a>
+                <a href="javascript:void(0)" class="js-tag color1">谜之DIY</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Android</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -778,11 +744,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">怀旧物</a>
+                <a href="javascript:void(0)" class="js-tag color3">Arduino</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">FPGA</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">怀旧物</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -794,7 +764,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color5">FPGA</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -810,11 +780,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Deep Learning</a>
+                <a href="javascript:void(0)" class="js-tag color3">感悟</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">感悟</a>
+                <a href="javascript:void(0)" class="js-tag color4">Deep Learning</a>
               </li>
              
               <li class="article-tag-list-item">

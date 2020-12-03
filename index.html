@@ -189,6 +189,126 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-deepvision" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/09/02/deepvision/">【已开源】如何快速部署CV算法--DeepVision CV推理框架</a>
+    </h1>
+  
+
+        
+        <a href="/2020/09/02/deepvision/" class="archive-article-date">
+  	<time datetime="2020-09-02T08:34:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-09-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>一个算法模型的落地需要经历从算法任务确立，到方法调研、模型选型和优化、数据采集标定、模型训练、部署验证等一整个pipeline，其中对于绝大多数的算法工程师，模型的训练和输出是没有问题的，但是要快速地进行模型在移动设备上的效果验证，则需要移动端开发人员和配合才能完成。另一方面，考虑到团队内CV算法研究方向很多，如果每个模型都单独在移动端开发一套验证APP的话显然费时费力，重复造轮子。</p>
+<p><img src="img/deepvision1.jpg" alt=""></p>
+<p>为了解决模型移动端部署验证困难，以及每个模型都单独在移动端开发一套验证APP带来的重复工作的问题，本项目实现了CV算法快速验证框架项目，旨在提供一套通用的CV算法验证框架。框架经过本人一年多的开发和维护，目前已经完成绝大部分API的开发，实现包括实时视频流模块、单帧图像处理模块、3D场景模块、云端推理模块等众多功能。</p>
+<blockquote>
+<p><strong>大家可以看到我做的很多其他项目都用到了这个框架，比如L-ink、火星车等，本仓库将这个框架的非核心部分开源出来，代码里整合了重新编译的OpenCV native和JAVA库，大家可以自己扩展用于实现自己的项目。</strong></p>
+</blockquote>
+<h2 id="CV算法验证框架设计"><a href="#CV算法验证框架设计" class="headerlink" title="CV算法验证框架设计"></a>CV算法验证框架设计</h2><p>构建包含推理的应用程序所涉及的不仅仅是运行深度学习推理模型，开发者还需要做到以下几点：</p>
+<ul>
+<li>利用各种设备的功能</li>
+<li>平衡设备资源使用和推理结果的质量</li>
+<li>通过流水线并行运行多个操作</li>
+<li>确保时间序列数据同步正确</li>
+</ul>
+<p>本框架解决了这些挑战，将上述软件框架解耦为<code>数据流控制层</code>、<code>nn推理引擎层</code>，以及<code>UI层</code>进行框架实现，把数据流处理管道构建为模块化组件，包括推理处理模型和媒体处理功能等。</p>
+<ul>
+<li><p>其中数据流控制层包含三个大的模块 – 视频流模块、图片和编辑模块、3D场景模块，每个模块提供可供配置的数据流参数接口，同时提供了一些常用的工具包如<code>OpenCV</code>、<code>QVision</code>等用于作为模型的数据输入和预处理。</p>
+</li>
+<li><p>nn推理引擎层则集成了一些移动端常用的推理框架比如<code>SNPE</code>、<code>TensorFlow Lite</code>等，并提供统一模板便于后续持续维护扩展其他推理框架。</p>
+</li>
+<li>UI层则封装好了图像渲染模块，以及各种调试控件。在API方面，该算法验证框架提供了Native/JAVA/Script三个层次的API，前两者可以在Android工程中进行快速模型集成，Script API则不需要编写任何APP 代码，通过文本脚本解析的形式配置模型推理选项。</li>
+</ul>
+<p>通过以上功能使开发者可以专注于算法或模型开发，并使用本框架作为迭代改进其应用程序的环境，其结果可在不同的设备和平台上重现。</p>
+<p>下图是本框架的模块划分架构图：</p>
+<p><img src="img/deepvision2.jpg" alt=""></p>
+<h2 id="API接口说明"><a href="#API接口说明" class="headerlink" title="API接口说明"></a>API接口说明</h2><p>从图中各个模块的名字可以看出个模块的功能，输入是转换好的算法模型，以及图像数据流，其中图像数据流分为摄像头采集的视频数据帧、相册选取的单帧图像，以及应用于3DCNN的3维模型文件。</p>
+<p>本框架提供了Native/JAVA/Script三个层次的API，前两者可以在Android工程中进行快速模型集成，其中Native为C/C++接口，提供JNI模板以及封装好的通信组件便于和JAVA进行数据交互；JAVA层则为Android API，使用和C++一样风格的进行封装，此外提供一些UI绘制函数接口；Script API则不需要编写任何APP 代码，通过文本脚本解析的形式配置模型推理选项。</p>
+<p>举例在JAVA API下，算法模型在代码中的初始化方式如下，以高通平台的SNPE Runtime为例，只需要几行非常简单的代码即可加载并初始化模型：</p>
+<p><img src="img/deepvision3.jpg" alt=""></p>
+<p>如代码所示，模型文件的加载方式比较灵活，可以作为FileInputStream加载，也可以作为APP的Asset进行加载。</p>
+<p>而图像数据的预处理和结果回调使用也非常简单，通过提供的OpenCV、QVison等CV库封装接口，可以方便地调取很多图像处理函数：</p>
+<p><img src="img/deepvision4.jpg" alt=""></p>
+<p>其中常用的一些操作比如数据的归一化等函数都经过底层优化，保证数据一致性和高效性，比如数据类型的转换使用了zero-copy：</p>
+<p><img src="img/deepvision5.jpg" alt=""></p>
+<p>同时OpenCV的编译开启了NEON指令、OpenMP多核等加速选项，对于图像的归一化等操作可以做到并行化加速。</p>
+<p><strong>具体的接口reference说明请参考工程代码。</strong></p>
+<h2 id="模型优化算法实现和工具封装"><a href="#模型优化算法实现和工具封装" class="headerlink" title="模型优化算法实现和工具封装"></a>模型优化算法实现和工具封装</h2><p>除了APP侧的接口外，本CV算法验证框架提供了一套配套的模型优化工具（暂未开放），包括：</p>
+<ul>
+<li>模型8bit量化工具</li>
+<li>模型结构化剪枝工具</li>
+<li>模型转换工具</li>
+</ul>
+<p>使用TensorFlow或者PyTorch等Training框架训练好的pb、pth、onnx等模型文件并不能直接在移动端进行部署运行，而是需要做一些模型转换工作，本框架将各种转换工具打包，提供了一套方便的模型转换工具。</p>
+<p>其中的模型量化工具基于TensorFlow的TOCO、Pytorch的QNNPACK等实现。</p>
+<p>剪枝工具则是根据论文<strong>Learning Efficient Convolutional Networks Through Network Slimming (ICCV 2017)</strong>提到的模型剪枝方法进行复现实现的。</p>
+<p>模型转换工具和具体的Inference Runtime有关，比如SNPE则是使用DLC转换脚本、TensorFlow使用的是TF Lite转换工具等等。</p>
+<p><img src="img/deepvision6.jpg" alt=""></p>
+<p>如上图所示，除了模型优化工具，框架的工具包中还提供了一些预训练和部署好的Model Zoo，用于做同平台性能对比测试的Baseline，目前以及实现部署好的有YOLO、MTCNN、Openpose等模型。</p>
+<h2 id="API文档"><a href="#API文档" class="headerlink" title="API文档"></a>API文档</h2><p><strong>待补充，另外框架工具代码也还在整理中。</strong></p>
+<h2 id="框架在移动端的实际效果"><a href="#框架在移动端的实际效果" class="headerlink" title="框架在移动端的实际效果"></a>框架在移动端的实际效果</h2><blockquote>
+<ul>
+<li><p>Camera视频流、单帧图像，以及3D场景模块选择</p>
+</li>
+<li><p>同一框架下可以同时验证多个算法模型</p>
+</li>
+<li>模型实际运行效果</li>
+</ul>
+</blockquote>
+<p><img src="img/deepvision7.jpg" alt=""></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/09/02/deepvision/">全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-foc" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -210,7 +330,7 @@ var _hmt = _hmt || [];
     <div class="article-entry" itemprop="articleBody">
       
         <p><img src="/img/foc1.jpg" alt=""></p>
-<h2 id="0-前言"><a href="#0-前言" class="headerlink" title="0.前言"></a>0.前言</h2><p>前阵子工作太忙，好久没做个人项目了，最近久违地想做一个机器人项目玩，设计中需要用到高性能超小体积的伺服电机。</p>
+<h2 id="0-前言"><a href="#0-前言" class="headerlink" title="0.前言"></a>0.前言</h2><p>前阵子工作太忙，好久没做个人项目了，最近久违地想做一个机器人项目，设计中需要用到高性能超小体积的伺服电机。</p>
 <p>电机这一块性能满足项目需求的基本上只有<strong>无刷电机</strong>可以选了–又要大功率、大扭矩，又要体积小，成本还最好不要太高，选择低KV值的无刷电机显然是最合适的。我预计的方案中计划把减速器也省略了，采用扭矩无刷电机直驱。那么作为机器人硬件三大核心部件（<strong>电机</strong>、<strong>减速器</strong>、<strong>驱动器</strong>）之一的驱动器，我感觉是有必要自己设计一下的，因此这里把我学习FOC过程中看到的一些有关无刷电机矢量控制的资料和个人理解整理分享出来。</p>
 <h3 id="0-1-什么是FOC？"><a href="#0-1-什么是FOC？" class="headerlink" title="0.1 什么是FOC？"></a><strong>0.1 什么是FOC？</strong></h3><p><strong>FOC（Field-Oriented Control）</strong>，直译是磁场定向控制，也被称作矢量控制<strong>（VC，Vector Control）</strong>，是目前无刷直流电机（BLDC）和永磁同步电机（PMSM）高效控制的最优方法之一。FOC旨在通过精确地控制磁场大小与方向，使得电机的运动转矩平稳、噪声小、效率高，并且具有高速的动态响应。</p>
 <p>简单来说就是，FOC是一种对无刷电机的驱动控制方法，它可以让我们对无刷电机进行“<strong>像素级”</strong>控制，实现很多传统电机控制方法所无法达到的效果~</p>
@@ -437,7 +557,7 @@ var _hmt = _hmt || [];
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/20/linuxcard/">自制超迷你模组化Linux卡片电脑【Project Quantum】</a>
+      <a class="article-title" href="/2019/12/20/linuxcard/">【已开源】自制超迷你模组化Linux卡片电脑【Project Quantum】</a>
     </h1>
   
 
@@ -494,77 +614,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/12/20/linuxcard/">全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-myhome" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/27/myhome/">【带你参观我的家】野生极客工程师装备配置指南</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/27/myhome/" class="archive-article-date">
-  	<time datetime="2019-10-27T12:34:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>最近开始玩B站了，第一次拍摄Vlog，由于搬家仓促所以其实还有很多工具没有来得及拍，等新家布置完毕了以后可能会再投一篇来介绍，希望对大家有帮助~</p>
-<p>目前还只是个小UP，以后会尽量抽空多发视频的，也欢迎大家关注，本博客标题下面有我的主页的跳转链接。</p>
-</blockquote>
-<div style="height: 0;padding-bottom:65%;position: relative;"><br><iframe width="760" height="510" src="//player.bilibili.com/player.html?aid=73533882&cid=125772471&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen style="position: absolute;height: 105%;width: 100%;"> </iframe><br></div>  
-
-
-
-<p><br></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/27/myhome/">全文 >></a>
         </p>
       
 
@@ -716,14 +765,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">谜之DIY</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Android</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
               </li>
              
@@ -740,7 +781,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Arduino</a>
+                <a href="javascript:void(0)" class="js-tag color1">谜之DIY</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Android</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -748,11 +793,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">怀旧物</a>
+                <a href="javascript:void(0)" class="js-tag color3">Arduino</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">FPGA</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">怀旧物</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -764,7 +813,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color5">FPGA</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -780,11 +829,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Deep Learning</a>
+                <a href="javascript:void(0)" class="js-tag color3">感悟</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">感悟</a>
+                <a href="javascript:void(0)" class="js-tag color4">Deep Learning</a>
               </li>
              
               <li class="article-tag-list-item">
